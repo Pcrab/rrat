@@ -1,0 +1,55 @@
+name: Tester
+
+on: [push, pull_request]
+
+jobs:
+  tester:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: ['16.x', '18.x', '20.x']
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 'latest'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install
+      - name: Test
+        run: pnpm run test
+  
+  coverage:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: ['18.x']
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 'latest'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install
+      - name: Coverage
+        run: pnpm run test-cov
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+  

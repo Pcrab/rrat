@@ -1,0 +1,64 @@
+{
+    "author": {
+        "email": "pcrab@pcrab.xyz",
+        "name": "Pcrab",
+        "url": "https://github.com/Pcrab"
+    },
+    "config": {
+        "commitizen": {
+            "path": "node_modules/cz-conventional-changelog"
+        }
+    },
+    "description": "A simple radix tree implementation specialized for routing",
+    "devDependencies": {
+        "@commitlint/cli": "^17.6.3",
+        "@commitlint/config-conventional": "^17.6.3",
+        "@pcrab/eslint-config": "^0.5.1",
+        "@pcrab/prettier-config": "^0.2.0",
+        "@types/node": "^20.0.0",
+        "c8": "^7.13.0",
+        "commitizen": "^4.3.0",
+        "cz-conventional-changelog": "^3.3.0",
+        "eslint": "^8.39.0",
+        "husky": "^8.0.3",
+        "prettier": "^2.8.8",
+        "rimraf": "^5.0.0",
+        "rollup": "^3.21.5",
+        "rollup-plugin-dts": "^5.3.0",
+        "rollup-plugin-swc3": "^0.8.1",
+        "tsx": "^3.12.7",
+        "typescript": "^5.0.4"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "keywords": [
+        "data-structure",
+        "radix-tree",
+        "typescript"
+    ],
+    "license": "MIT",
+    "main": "dist/index.cjs",
+    "module": "dist/index.mjs",
+    "name": "rrat",
+    "prettier": "@pcrab/prettier-config",
+    "scripts": {
+        "build": "pnpm run tsnode scripts/build.ts",
+        "commit": "git-cz",
+        "lint": "eslint \"src/**/*.{ts, tsx}\"",
+        "preinstall": "npx only-allow pnpm",
+        "prepare": "husky install",
+        "prepublishOnly": "pnpm build",
+        "test": "pnpm run tsnode --test test/*",
+        "test-cov": "c8 --reporter=lcovonly pnpm run test",
+        "test-html": "c8 --reporter=lcov pnpm run test",
+        "tsnode": "node --loader tsx"
+    },
+    "type": "module",
+    "types": "dist/index.d.ts",
+    "version": "0.0.0"
+}
