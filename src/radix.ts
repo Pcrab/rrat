@@ -45,6 +45,7 @@ const search = <T>(rootNode: RadixNode<T>, path: string): RadixSearchResult<T> |
     }
     return {
         ...currentNode,
+        name: path,
         params,
     };
 };
