@@ -36,6 +36,9 @@
             "types": "./dist/index.d.ts"
         }
     },
+    "files": [
+        "dist"
+    ],
     "keywords": [
         "data-structure",
         "radix-tree",
@@ -60,5 +63,5 @@
     },
     "type": "module",
     "types": "dist/index.d.ts",
-    "version": "0.0.0"
+    "version": "0.0.1"
 }
