@@ -8,8 +8,8 @@ devDependencies:
     specifier: ^17.6.3
     version: 17.6.3
   '@pcrab/eslint-config':
-    specifier: ^0.5.1
-    version: 0.5.1(eslint@8.39.0)(prettier@2.8.8)(typescript@5.0.4)
+    specifier: ^0.6.0
+    version: 0.6.0(eslint@8.39.0)(prettier@2.8.8)(typescript@5.0.4)
   '@pcrab/prettier-config':
     specifier: ^0.2.0
     version: 0.2.0
@@ -605,8 +605,8 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@pcrab/eslint-config@0.5.1(eslint@8.39.0)(prettier@2.8.8)(typescript@5.0.4):
-    resolution: {integrity: sha512-7QT4Qvx5MfBOajFY37e6nRKzqH0rLa2ZdewvRvMr9uqPmwuUKojc9TwsdsCQdF7sUdZTZzRovBscy6Zxj62JwQ==}
+  /@pcrab/eslint-config@0.6.0(eslint@8.39.0)(prettier@2.8.8)(typescript@5.0.4):
+    resolution: {integrity: sha512-Oft4ktG0DMH90qaiI102wWk4HJUiKcq2h6rpeS6Ge8BeRFTmyvScDBqa/d+pH7GtoFRWXw26FCkVH1n5s208AA==}
     requiresBuild: true
     peerDependencies:
       eslint: '>=7.2.0'
