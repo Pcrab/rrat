@@ -131,6 +131,19 @@ const parsePaths = (path: string): string[] => {
     return paths;
 };
 
+/**
+ * Merge two radix trees: merge tree `from` to tree `to`.
+ * @param to Merge to
+ * @param from Merge from
+ * @param path Merge base path
+ * @example
+ * const tree1 = createRadixTree();
+ * tree1.insert("/a/b/c", "1");
+ * const tree2 = createRadixTree();
+ * tree2.insert("/a/b/d", "4");
+ * mergeRadixTree(tree1, tree2);
+ * // tree1 now contains: /a/b/c -> "1", /a/b/d -> "4"
+ */
 const mergeRadixTree = <T>(to: RadixTree<T>, from: RadixTree<T>, path = ""): void => {
     let endpoint: RadixNode<T> | null = null;
     if (path === "/" || path === "") {
