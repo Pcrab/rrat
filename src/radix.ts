@@ -132,21 +132,24 @@ const parsePaths = (path: string): string[] => {
 };
 
 const mergeRadixTree = <T>(to: RadixTree<T>, from: RadixTree<T>, path = ""): void => {
-    let endpoint: RadixNode<T> | undefined;
+    let endpoint: RadixNode<T> | null = null;
     if (path === "/" || path === "") {
         endpoint = to.root;
     } else {
-        endpoint = searchOrigin<T>(to.root, path)?.[0];
+        endpoint = (searchOrigin<T>(to.root, path) ?? [])[0] ?? null;
         if (!endpoint) {
             to.insert(path, from.root.content);
-            endpoint = searchOrigin<T>(to.root, path)?.[0];
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            endpoint = searchOrigin<T>(to.root, path)![0]!;
         }
     }
     for (const [key, value] of from.root.children) {
-        endpoint?.children.set(key, value);
+        endpoint.children.set(key, value);
+        value.parent = endpoint;
     }
-    if (from.root.wildCardChild && endpoint) {
+    if (from.root.wildCardChild) {
         endpoint.wildCardChild = from.root.wildCardChild;
+        endpoint.wildCardChild.parent = endpoint;
     }
 };
 

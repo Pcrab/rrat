@@ -86,14 +86,16 @@ describe("Radix Tree", () => {
 
     it("merge endpoint", () => {
         const testTree = createRadixTree();
-        testTree.insert("/test/*/1", "test*1");
+        testTree.insert("/test/tt/1", "test*1");
 
         const testTree2 = createRadixTree();
         testTree2.insert("/param/2", "testParam2");
 
-        mergeRadixTree(testTree, testTree2, "test");
-        assert.strictEqual(testTree.search("/test/wild/1")?.content, "test*1");
-        assert.strictEqual(testTree.search("/test/param/2")?.content, "testParam2");
+        mergeRadixTree(testTree, testTree2, "test/asdf");
+        assert.strictEqual(testTree.search("/test/tt/1")?.content, "test*1");
+        assert.strictEqual(testTree.search("/test/asdf/param/2")?.content, "testParam2");
+        // test parent node is set correctly
+        assert.strictEqual(testTree.search("/test/asdf/param")?.parent?.name, "asdf");
 
         // merge into unexisting endpoint
         const testTree3 = createRadixTree();
