@@ -15,7 +15,7 @@ const createRadixTree = <T>(options: RadixTreeOptions = {}): RadixTree<T> => {
         search: (path: string): RadixSearchResult<T> | null => {
             return search(root, path);
         },
-        insert: (path: string, data: T): void => {
+        insert: (path: string, data: T | null): void => {
             insert(root, path, data);
         },
         remove: (path: string): boolean => {
@@ -24,7 +24,7 @@ const createRadixTree = <T>(options: RadixTreeOptions = {}): RadixTree<T> => {
     };
 };
 
-const search = <T>(rootNode: RadixNode<T>, path: string): RadixSearchResult<T> | null => {
+const searchOrigin = <T>(rootNode: RadixNode<T>, path: string): [RadixNode<T>, Map<string, string>] | null => {
     const paths = parsePaths(path);
     let currentNode = rootNode;
     const params = new Map<string, string>();
@@ -43,14 +43,22 @@ const search = <T>(rootNode: RadixNode<T>, path: string): RadixSearchResult<T> |
             }
         }
     }
+    return [currentNode, params];
+};
+
+const search = <T>(rootNode: RadixNode<T>, path: string): RadixSearchResult<T> | null => {
+    const searchResult = searchOrigin(rootNode, path);
+    if (!searchResult) {
+        return null;
+    }
     return {
-        ...currentNode,
+        ...searchResult[0],
         name: path,
-        params,
+        params: searchResult[1],
     };
 };
 
-const insert = <T>(rootNode: RadixNode<T>, path: string, data: T): void => {
+const insert = <T>(rootNode: RadixNode<T>, path: string, data: T | null): void => {
     const paths = parsePaths(path);
     let currentNode: RadixNode<T> = rootNode;
     for (const path of paths) {
@@ -123,4 +131,23 @@ const parsePaths = (path: string): string[] => {
     return paths;
 };
 
-export { createRadixTree };
+const mergeRadixTree = <T>(to: RadixTree<T>, from: RadixTree<T>, path = ""): void => {
+    let endpoint: RadixNode<T> | undefined;
+    if (path === "/" || path === "") {
+        endpoint = to.root;
+    } else {
+        endpoint = searchOrigin<T>(to.root, path)?.[0];
+        if (!endpoint) {
+            to.insert(path, from.root.content);
+            endpoint = searchOrigin<T>(to.root, path)?.[0];
+        }
+    }
+    for (const [key, value] of from.root.children) {
+        endpoint?.children.set(key, value);
+    }
+    if (from.root.wildCardChild && endpoint) {
+        endpoint.wildCardChild = from.root.wildCardChild;
+    }
+};
+
+export { createRadixTree, mergeRadixTree };

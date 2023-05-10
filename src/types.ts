@@ -17,7 +17,7 @@ interface RadixTree<T> {
     root: RadixNode<T>;
     options: RadixTreeOptions;
     search: (path: string) => RadixSearchResult<T> | null;
-    insert: (path: string, data: T) => void;
+    insert: (path: string, data: T | null) => void;
     remove: (path: string) => boolean;
 }
 

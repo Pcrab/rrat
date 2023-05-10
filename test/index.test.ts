@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert";
 
-import { createRadixTree } from "../src";
+import { createRadixTree, mergeRadixTree } from "../src";
 
 describe("Radix Tree", () => {
     it("basic usage", () => {
@@ -59,5 +59,51 @@ describe("Radix Tree", () => {
         assert.strictEqual(testTree.search("/test/wild2/3")?.content, "testParam3");
         assert.strictEqual(testTree.search("/test/wild2/3")?.params.get("param"), undefined);
         assert.strictEqual(testTree.search("/test/wild2/3")?.params.get("newparam"), "wild2");
+    });
+
+    it("merge trees", () => {
+        const testTree = createRadixTree();
+        testTree.insert("/*/1", "test*1");
+
+        const testTree2 = createRadixTree();
+        testTree2.insert("/:param/2", "testParam2");
+
+        mergeRadixTree(testTree, testTree2);
+        assert.strictEqual(testTree.search("/wild/1"), null);
+        assert.strictEqual(testTree.search("/wild/2")?.content, "testParam2");
+
+        // merge into unexisting path
+        const testTree3 = createRadixTree();
+        testTree3.insert("/1", "test*1");
+
+        const testTree4 = createRadixTree();
+        testTree4.insert("/:param/2", "testParam2");
+
+        mergeRadixTree(testTree3, testTree4);
+        assert.strictEqual(testTree3.search("/1")?.content, "test*1");
+        assert.strictEqual(testTree3.search("/wild/2")?.content, "testParam2");
+    });
+
+    it("merge endpoint", () => {
+        const testTree = createRadixTree();
+        testTree.insert("/test/*/1", "test*1");
+
+        const testTree2 = createRadixTree();
+        testTree2.insert("/param/2", "testParam2");
+
+        mergeRadixTree(testTree, testTree2, "test");
+        assert.strictEqual(testTree.search("/test/wild/1")?.content, "test*1");
+        assert.strictEqual(testTree.search("/test/param/2")?.content, "testParam2");
+
+        // merge into unexisting endpoint
+        const testTree3 = createRadixTree();
+        testTree3.insert("/test/1", "test*1");
+
+        const testTree4 = createRadixTree();
+        testTree4.insert("/:param/2", "testParam2");
+
+        mergeRadixTree(testTree3, testTree4, "notExist");
+        assert.strictEqual(testTree3.search("/test/1")?.content, "test*1");
+        assert.strictEqual(testTree3.search("/notExist/wild/2")?.content, "testParam2");
     });
 });
