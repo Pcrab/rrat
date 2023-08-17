@@ -24,7 +24,7 @@
         "prettier": "^2.8.8",
         "rimraf": "^5.0.0",
         "rollup": "^3.21.5",
-        "rollup-plugin-dts": "^5.3.0",
+        "rollup-plugin-dts": "^6.0.0",
         "rollup-plugin-swc3": "^0.8.1",
         "tsx": "^3.12.7",
         "typescript": "^5.0.4"
